@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop CRM Tech Stack</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    /* Reset some default styles */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #f0f0f5;
+      margin: 0;
+      padding: 40px 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+    .container {
+      background: #1a1a2e;
+      border-radius: 16px;
+      max-width: 720px;
+      width: 100%;
+      padding: 40px 40px 50px;
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+      user-select: none;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      font-size: 2.8rem;
+      margin-bottom: 30px;
+      letter-spacing: 1.2px;
+      color: #f3f4f6;
+      text-shadow: 0 2px 8px rgba(118, 75, 162, 0.8);
+    }
+    section {
+      margin-bottom: 35px;
+    }
+    h2 {
+      font-weight: 600;
+      font-size: 1.6rem;
+      margin-bottom: 18px;
+      position: relative;
+      padding-bottom: 6px;
+      color: #a78bfa;
+    }
+    h2::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 50px;
+      height: 3px;
+      background: #8b5cf6;
+      border-radius: 3px;
+      box-shadow: 0 2px 10px #8b5cf6;
+    }
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    li {
+      background: #262641;
+      margin-bottom: 12px;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 1.15rem;
+      box-shadow: 0 4px 15px rgba(118, 75, 162, 0.15);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: default;
+    }
+    li:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(118, 75, 162, 0.35);
+      background: #3e3e76;
+      color: #fefefe;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px 40px;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      h2 {
+        font-size: 1.3rem;
+      }
+      li {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Shop CRM Tech Stack Overview</h1>
+
+    <section>
+      <h2>Backend</h2>
+      <ul>
+        <li>Node.js</li>
+        <li>Express.js</li>
+        <li>JWT (JSON Web Tokens) for authentication</li>
+        <li>No need for bcrypt (password hashing)</li>
+        <li>Mongoose (MongoDB ODM)</li>
+        <li>Nodemon (development tool for auto restart)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Frontend</h2>
+      <ul>
+        <li>React.js</li>
+        <li>Tailwind CSS</li>
+        <li>Regular CSS</li>
+        <li>Material-UI (MUI)</li>
+        <li>React Icons</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Database</h2>
+      <ul>
+        <li>MongoDB</li>
+        <li>Mongoose (for schema & querying)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Storage</h2>
+      <ul>
+        <li>Cloudflare CDN (for storing images and static assets)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Backend Hosting</h2>
+      <ul>
+        <li>Ahost</li>
+        <li>Render.com</li>
+        <li>Railway</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Frontend Hosting</h2>
+      <ul>
+        <li>Vercel</li>
+        <li>Ahost domain</li>
+      </ul>
+    </section>
+
+  </div>
+</body>
+</html>

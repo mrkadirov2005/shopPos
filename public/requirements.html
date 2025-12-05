@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shop CRM Permissions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    .role-name {
+      background: #007BFF;
+      color: white;
+      font-weight: bold;
+      padding: 5px;
+      text-align: left;
+    }
+    .toggle {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Shop CRM Permission Requirements</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Permission</th>
+        <th>Superadmin</th>
+        <th>Admin (Seller)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CRUD_PRODUCTS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>ADD_BRANDS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>ADD_CATEGORIES</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>ADD_NEW_PRODUCTS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>RESTOCK_PRODUCTS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>MANAGE_ADMINS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>VIEW_ALL_SALES</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>MANAGE_SALES</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>VIEW_REPORTS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>MANAGE_SUPERADMINS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>MANAGE_PERMISSIONS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>MANAGE_INVENTORY</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>VIEW_PROFITS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>MANAGE_SUPPLIERS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>CONFIGURE_SETTINGS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" disabled></td>
+      </tr>
+      <tr>
+        <td>SELL_PRODUCTS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" checked></td>
+      </tr>
+      <tr>
+        <td>VIEW_PRODUCTS</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" checked></td>
+      </tr>
+      <tr>
+        <td>UPDATE_SALES</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox"></td>
+      </tr>
+      <tr>
+        <td>VIEW_OWN_SALES</td>
+        <td><input type="checkbox" checked disabled></td>
+        <td><input type="checkbox" checked></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><em>Note: Superadmin has all permissions (checked and disabled to prevent changes here). Admin permissions can be toggled.</em></p>
+
+</body>
+</html>

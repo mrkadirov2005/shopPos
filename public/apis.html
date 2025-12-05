@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Shop CRM API Endpoints</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 0 20px;
+    background: #f9f9f9;
+    color: #333;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  section {
+    margin-bottom: 30px;
+  }
+  h2 {
+    border-bottom: 2px solid #007BFF;
+    padding-bottom: 5px;
+    color: #007BFF;
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  li {
+    margin: 6px 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 5px;
+  }
+  code {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: Consolas, monospace;
+  }
+  .method {
+    font-weight: bold;
+    margin-right: 8px;
+  }
+  .get { color: #2a9d8f; }
+  .post { color: #e76f51; }
+  .put { color: #f4a261; }
+  .patch { color: #f4a261; }
+  .delete { color: #e63946; }
+</style>
+</head>
+<body>
+
+<h1>Shop CRM API Endpoints</h1>
+
+<section>
+  <h2>Authentication &amp; User Management</h2>
+  <ul>
+    <li><span class="method post">POST</span><code>/auth/register</code> — Register new admin or superadmin user</li>
+    <li><span class="method post">POST</span><code>/auth/login</code> — Login (returns token)</li>
+    <li><span class="method post">POST</span><code>/auth/logout</code> — Logout user</li>
+    <li><span class="method post">POST</span><code>/auth/refresh-token</code> — Refresh access token</li>
+    <li><span class="method get">GET</span><code>/users/:uuid</code> — Get user profile info</li>
+    <li><span class="method put">PUT</span><code>/users/:uuid</code> — Update user info</li>
+    <li><span class="method delete">DELETE</span><code>/users/:uuid</code> — Delete user</li>
+    <li><span class="method get">GET</span><code>/users</code> — List all users</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Products</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/products</code> — List all products (filters supported)</li>
+    <li><span class="method get">GET</span><code>/products/:id</code> — Get product details</li>
+    <li><span class="method post">POST</span><code>/products</code> — Create new product</li>
+    <li><span class="method put">PUT</span><code>/products/:id</code> — Update product details</li>
+    <li><span class="method patch">PATCH</span><code>/products/:id/restock</code> — Restock product</li>
+    <li><span class="method delete">DELETE</span><code>/products/:id</code> — Delete product</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Categories</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/categories</code> — List categories</li>
+    <li><span class="method get">GET</span><code>/categories/:name</code> — Get category by name</li>
+    <li><span class="method post">POST</span><code>/categories</code> — Add category</li>
+    <li><span class="method put">PUT</span><code>/categories/:name</code> — Update category</li>
+    <li><span class="method delete">DELETE</span><code>/categories/:name</code> — Delete category</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Brands</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/brands</code> — List brands</li>
+    <li><span class="method get">GET</span><code>/brands/:name</code> — Get brand details</li>
+    <li><span class="method post">POST</span><code>/brands</code> — Add brand</li>
+    <li><span class="method put">PUT</span><code>/brands/:name</code> — Update brand</li>
+    <li><span class="method delete">DELETE</span><code>/brands/:name</code> — Delete brand</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Sales</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/sales</code> — List sales (filterable)</li>
+    <li><span class="method get">GET</span><code>/sales/:sale_id</code> — Get sale details</li>
+    <li><span class="method post">POST</span><code>/sales</code> — Create new sale</li>
+    <li><span class="method put">PUT</span><code>/sales/:sale_id</code> — Update sale</li>
+    <li><span class="method delete">DELETE</span><code>/sales/:sale_id</code> — Delete sale</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Statistics &amp; Reports</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/stats/week</code> — Weekly sales stats</li>
+    <li><span class="method get">GET</span><code>/stats/month</code> — Monthly sales stats</li>
+    <li><span class="method get">GET</span><code>/stats/profit</code> — Profit reports</li>
+    <li><span class="method get">GET</span><code>/stats/inventory</code> — Inventory levels</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Permissions</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/permissions</code> — List permissions</li>
+    <li><span class="method post">POST</span><code>/permissions</code> — Create permission</li>
+    <li><span class="method put">PUT</span><code>/permissions/:id</code> — Update permission</li>
+    <li><span class="method delete">DELETE</span><code>/permissions/:id</code> — Delete permission</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Admins / Users</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/admins</code> — List admins</li>
+    <li><span class="method get">GET</span><code>/admins/:uuid</code> — Get admin details</li>
+    <li><span class="method post">POST</span><code>/admins</code> — Create admin</li>
+    <li><span class="method put">PUT</span><code>/admins/:uuid</code> — Update admin</li>
+    <li><span class="method delete">DELETE</span><code>/admins/:uuid</code> — Delete admin</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Suppliers (Optional)</h2>
+  <ul>
+    <li><span class="method get">GET</span><code>/suppliers</code> — List suppliers</li>
+    <li><span class="method post">POST</span><code>/suppliers</code> — Add supplier</li>
+    <li><span class="method put">PUT</span><code>/suppliers/:id</code> — Update supplier</li>
+    <li><span class="method delete">DELETE</span><code>/suppliers/:id</code> — Delete supplier</li>
+  </ul>
+</section>
+
+</body>
+</html>
