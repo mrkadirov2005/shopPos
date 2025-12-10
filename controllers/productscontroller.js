@@ -151,7 +151,7 @@ console.log(req.body)
 
     return res.status(201).json({
       message: "Product created successfully",
-      product: response.rows[0]
+      data: response.rows
     });
 
   } catch (error) {
@@ -251,7 +251,7 @@ export const updateProduct = async (req, res) => {
 
     return res.status(200).json({
       message: "Product updated successfully",
-      product: response.rows[0]
+      data: response.rows[0]
     });
 
   } catch (error) {
@@ -262,57 +262,26 @@ export const updateProduct = async (req, res) => {
     });
   }
 };
-
 // =========================== RESTOCK PRODUCT ===========================
 export const restockProduct = async (req, res) => {
-  const { id } = req.body;
+  const { id, total, availability } = req.body;
 
   if (!id) {
     return res.status(400).json({ message: "Product ID is required" });
   }
-
-  const {
-    scale,
-    availability,
-    total,
-    receival_date,
-    expire_date,
-    net_price,
-    sell_price,
-    cost_price,
-    last_restocked
-  } = req.body;
-
+ const stock=availability+total;
   try {
     const updateQuery = `
       UPDATE product
       SET
-        scale = COALESCE($1, scale),
-        availability = COALESCE($2, availability),
-        total = COALESCE($3, total),
-        receival_date = COALESCE($4, receival_date),
-        expire_date = COALESCE($5, expire_date),
-        net_price = COALESCE($6, net_price),
-        sell_price = COALESCE($7, sell_price),
-        cost_price = COALESCE($8, cost_price),
-        last_restocked = COALESCE($9, last_restocked),
+        total = $2,
+        availability = $3,
         updatedat = now()
-      WHERE id = $10
+      WHERE id = $1
       RETURNING *;
     `;
 
-    const values = [
-      scale || null,
-      availability || null,
-      total || null,
-      receival_date || null,
-      expire_date || null,
-      net_price || null,
-      sell_price || null,
-      cost_price || null,
-      last_restocked || null,
-      id
-    ];
+    const values = [id, total, stock];
 
     const response = await client.query(updateQuery, values);
 
@@ -322,14 +291,14 @@ export const restockProduct = async (req, res) => {
 
     return res.status(200).json({
       message: "Product restocked successfully",
-      product: response.rows[0]
+      data: response.rows,
     });
 
   } catch (error) {
     console.error("Error restocking product:", error);
     return res.status(500).json({
       message: "Internal server error",
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -361,7 +330,7 @@ export const deleteProduct = async (req, res) => {
 
     return res.status(200).json({
       message: "Product deleted successfully",
-      deletedProduct: response.rows[0]
+      data: response.rows
     });
 
   } catch (error) {

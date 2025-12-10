@@ -7,6 +7,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import jwt from "jsonwebtoken";
 import { JWTKEYS } from '../config/JWT_keys.js';
+import { logger } from '../middleware/Logger.js';
+import { extractJWT } from '../middleware/extractToken.js';
 export const createAdmin = async (req, res) => {
   if (!req.body) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
@@ -105,7 +107,8 @@ export const createAdmin = async (req, res) => {
         shop_id
       ]
     );
-
+    const id=extractJWT(req.headers["authorization"])
+      await logger(shop_id,id,"User Created by superuser")
     return res.status(201).json({
       message: "Admin created successfully",
       data: response.rows,
