@@ -68,7 +68,7 @@ router.get("/", getShops);
  *       500:
  *         description: Server error
  */
-router.get("/branches", getShopBranches);
+router.post("/branches", getShopBranches);
 
 /**
  * @swagger

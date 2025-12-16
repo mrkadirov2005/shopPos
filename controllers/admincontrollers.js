@@ -32,7 +32,7 @@ export const createAdmin = async (req, res) => {
     branch
   } = req.body;
 
-  if (!uuid || !first_name || !last_name || !phone_number || !password || !salary || !permissions || !shop_id || !branch) {
+  if (!uuid || !first_name || !last_name || !phone_number || !password || !salary || !permissions || !shop_id || branch==null) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
 

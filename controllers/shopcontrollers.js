@@ -48,7 +48,7 @@ export const getShops = (req, res) => {
             }
 
             // Success
-            return res.status(200).json({ branches: result.rows });
+            return res.status(200).json({message:"Successfully fetched the data", data: result.rows });
         }
     );
 };

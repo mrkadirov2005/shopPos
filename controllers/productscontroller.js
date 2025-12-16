@@ -141,9 +141,10 @@ export const createNewProduct = async (req, res) => {
     total == null ||
     !net_price ||
     !sell_price
-    || !branch
+    || branch==null
   ) {
     await logger(shop_id, user_id, "Missing required fields in createNewProduct");
+    console.log(req.body)
     return res.status(400).json({
       message: "Missing required fields"
     });
