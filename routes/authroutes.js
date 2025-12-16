@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 
-import { generateSuperAdminToken, generateAdminToken, loginSuperUser, loginAdmin } from "./../controllers/authcontroller.js";
+import { generateSuperAdminToken, generateAdminToken, loginSuperUser, loginAdmin, handleLogOut } from "./../controllers/authcontroller.js";
 
 /**
  * @swagger
@@ -30,7 +30,7 @@ import { generateSuperAdminToken, generateAdminToken, loginSuperUser, loginAdmin
  *             properties:
  *               uuid:
  *                 type: string
- *                 example: "superuser-uuid-1234"
+ *                 example: "550e8400-e29b-41d4-a716-446655440000"
  *               name:
  *                 type: string
  *                 example: "John Superuser"
@@ -217,5 +217,7 @@ router.post("/login/superuser", loginSuperUser);
  *         description: Server error
  */
 router.post("/login/admin", loginAdmin);
+
+router.post("/logout",handleLogOut)
 
 export default router;

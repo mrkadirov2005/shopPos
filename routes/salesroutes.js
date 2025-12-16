@@ -4,6 +4,7 @@ import {
   createNewSale,
   getSaleById,
   getAllSales,
+  getAdminSales,
 } from "../controllers/salescontroller.js";
 import { validateToken } from "../middleware/validateToken.js"; // adjust path
 
@@ -37,7 +38,7 @@ router.use(validateToken);
  *               items:
  *                 type: object
  */
-router.get("/", getAllSales);
+router.post("/all", getAllSales);
 
 /**
  * @swagger
@@ -138,5 +139,6 @@ router.get("/by-id", getSaleById);
  *         description: Internal server error
  */
 router.post("/", createNewSale);
+router.post("/admin/sales",getAdminSales);
 
 export default router;

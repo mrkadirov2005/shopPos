@@ -83,7 +83,6 @@ export const getAllBrands=async(req,res)=>{
             return res.status(200).json({"message":"Fetched all data","data":response.rows})
         }
     } catch (error) {
-        console.log(error)
         return res.status(500).json({"message":errorMessages.INTERNAL_SERVER_ERROR,"error":error})
     }
 }
@@ -105,7 +104,6 @@ export const getSingleBrand=async(req,res)=>{
             return res.status(404).json({"message":"Brand not found"})
         }
     } catch (error) {
-        console.log(error)
         return res.status(500).json({"message":errorMessages.INTERNAL_SERVER_ERROR,"error":error})
     }
 }

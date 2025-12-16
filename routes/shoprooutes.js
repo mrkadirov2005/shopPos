@@ -98,7 +98,7 @@ router.post("/getbranch", getBranchById);
 
 /**
  * @swagger
- * /shops/branch:
+ * /shop/branch:
  *   post:
  *     summary: Create new branch
  *     tags:

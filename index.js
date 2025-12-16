@@ -13,7 +13,8 @@ import authRoutes from "./routes/authroutes.js";
 import shopRoutes from "./routes/shoprooutes.js";
 import saleRoutes from "./routes/salesroutes.js";
 import { validateToken } from "./middleware/validateToken.js";
-import statisticsRoutes from "./routes/statisticroutes.js"
+import statisticsRoutes from "./routes/statisticroutes.js";
+import reportRoutes from "./routes/reportroutes.js"
 
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
@@ -136,7 +137,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url:  "https://karyl-unstubborn-paityn.ngrok-free.dev",
+      url:  "https://foughten-geoffrey-unupbraidingly.ngrok-free.dev",
     },
   ],
   components: {
@@ -185,6 +186,8 @@ app.use("/category", categoryRoutes);
 app.use("/permission", PermissionRoutes);
 app.use("/shop", shopRoutes);
 app.use("/sales", saleRoutes);
+app.use("/report",reportRoutes)
+
 
 // Start server after DB connection
 const startServer = async () => {

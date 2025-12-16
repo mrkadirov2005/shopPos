@@ -33,7 +33,6 @@ export const MainFinance = async (req, res) => {
             "SELECT * FROM sales WHERE sale_day = $1 AND sales_month = $2",
             [day, month]
         );
-console.log(today,day,month,response.rows)
         // Calculate today totals
         for (let product of todayRes.rows) {
             sendable_data.today.sale += Number(product.total_price);

@@ -14,7 +14,7 @@ export const getShops = (req, res) => {
         return res.status(401).json({message:"Unauthorized access"});
     }
 // fetch all shops and return
-    client.query("SELECT * FROM shop_name",(err,result)=>{
+    client.query("SELECT * FROM shopname",(err,result)=>{
         if(err){
             console.error("Error fetching shops:",err);
             return res.status(500).json({message:"Server Error"});

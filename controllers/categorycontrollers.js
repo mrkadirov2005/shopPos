@@ -43,7 +43,6 @@ export const createCategory = async (req, res) => {
 // get all categories
 export const getAllCategories = async (req, res) => {
 
-  console.log(req.headers)
   try {
     const response = await client.query("SELECT * FROM category ORDER BY id DESC");
 
