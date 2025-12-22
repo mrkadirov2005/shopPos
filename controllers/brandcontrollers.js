@@ -109,6 +109,7 @@ export const getSingleBrand=async(req,res)=>{
 }
 
 export const updateBrand = async (req, res) => {
+  console.log(req.body)
   try {
     const { uuid } = req.body;
 

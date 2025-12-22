@@ -14,15 +14,20 @@ import shopRoutes from "./routes/shoprooutes.js";
 import saleRoutes from "./routes/salesroutes.js";
 import { validateToken } from "./middleware/validateToken.js";
 import statisticsRoutes from "./routes/statisticroutes.js";
-import reportRoutes from "./routes/reportroutes.js"
+import reportRoutes from "./routes/reportroutes.js";
+import debtRoutes from "./routes/debtRoutes.js";
+import backupRoutes from "./routes/backupRoutes.js";
 
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 const app = express();
 const PORT = 3000;
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
-app.use(express.json());
+
+
 app.get("/tables", async (req, res) => {
   try {
     const response = await client.query(`
@@ -186,7 +191,9 @@ app.use("/category", categoryRoutes);
 app.use("/permission", PermissionRoutes);
 app.use("/shop", shopRoutes);
 app.use("/sales", saleRoutes);
-app.use("/report",reportRoutes)
+app.use("/report",reportRoutes);
+app.use("/debts",debtRoutes);
+app.use("/backup", backupRoutes)
 
 
 // Start server after DB connection
