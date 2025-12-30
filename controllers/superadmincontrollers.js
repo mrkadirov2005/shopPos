@@ -26,7 +26,7 @@ export const createsuperadmin = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!name || !lastname || !email || !phonenumber || !password || !shopname) {
+  if (name == null || lastname == null || email == null || phonenumber == null || password == null || shopname == null) {
     await logger(shop_id, user_id, "Create superadmin failed - missing required fields");
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
@@ -60,12 +60,12 @@ export const updateSuperUser = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!uuid) {
+  if (uuid == null) {
     await logger(shop_id, user_id, "Update superadmin failed - missing UUID");
     return res.status(400).json({ error: "Missing UUID in request body" });
   }
 
-  if (!name || !lastname || !email || !phonenumber || !password || !shopname || !img_url) {
+  if (name == null || lastname == null || email == null || phonenumber == null || password == null || shopname == null || img_url == null) {
     await logger(shop_id, user_id, "Update superadmin failed - missing required fields");
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
@@ -80,7 +80,7 @@ export const updateSuperUser = async (req, res) => {
       [name, lastname, email, phonenumber, isLoggedin, password, shopname, img_url, uuid]
     );
 
-    if (!response.rows.length) {
+    if (response.rows.length === 0) {
       await logger(shop_id, user_id, `Update superadmin failed - superadmin not found: ${uuid}`);
       return res.status(404).json({ error: "Superadmin not found" });
     }
@@ -104,7 +104,7 @@ export const deleteSuperUser = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!uuid || !secret_word) {
+  if (uuid == null || secret_word == null) {
     await logger(shop_id, user_id, "Delete superadmin failed - missing uuid or secret_word");
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
@@ -120,7 +120,7 @@ export const deleteSuperUser = async (req, res) => {
       [uuid]
     );
 
-    if (!response.rows.length) {
+    if (response.rows.length === 0) {
       await logger(shop_id, user_id, `Delete superadmin failed - superadmin not found: ${uuid}`);
       return res.status(404).json({ error: "Superadmin not found" });
     }

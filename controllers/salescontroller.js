@@ -26,18 +26,18 @@ export const createNewSale = async (req, res) => {
   const target_id = extractJWT(req.headers["authorization"]);
   const user_id = req.headers["uuid"] || null;
 
-  if (!req.body) {
+  if (req.body == null) {
     await logger(target_id, user_id, "Create sale failed - missing request body");
     return res.status(400).send({ message: errorMessages.MISSING_FIELDS });
   }
 
   try {
-    if (!sale || !products || !payment_method) {
+    if (sale == null || products == null || payment_method == null) {
       await logger(target_id, user_id, "Create sale failed - missing sale, products or payment method");
       return res.status(400).send({ message: errorMessages.MISSING_FIELDS });
     }
 
-    if (!Array.isArray(products) || products.length === 0) {
+    if (Array.isArray(products) === false || products.length === 0) {
       await logger(target_id, user_id, "Create sale failed - products not a non-empty array");
       return res.status(400).send({ message: "Products must be a non-empty array" });
     }
@@ -74,7 +74,7 @@ export const createNewSale = async (req, res) => {
 
       const quantity = sell_quantity ?? amount;
 
-      if (!productid || !quantity) {
+      if (productid == null || quantity == null) {
         await client.query("ROLLBACK");
         return res.status(400).send({
           message: `Invalid product data at index ${index}`,
@@ -220,7 +220,7 @@ export const getSaleById = async (req, res) => {
 export const getAllSales = async (req, res) => {
   const target_id = extractJWT(req.headers["authorization"]);
   const {shop_id}=req.body;
-  if(!shop_id){
+  if(shop_id == null){
     return res.status(400).json({message:"Error occured",data:[]})
   }
 
@@ -241,7 +241,7 @@ export const getAdminSales = async (req, res) => {
     const { shop_id, admin_name } = req.body;
 
     // 1️⃣ Validate input
-    if (!shop_id || !admin_name) {
+    if (shop_id == null || admin_name == null) {
       return res.status(400).json({
         success: false,
         message: "shop_id and admin_name are required",

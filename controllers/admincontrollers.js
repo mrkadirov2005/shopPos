@@ -14,7 +14,7 @@ import { extractJWT } from '../middleware/extractToken.js';
 // CREATE ADMIN
 // =============================================
 export const createAdmin = async (req, res) => {
-  if (!req.body) {
+  if (req.body == null) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
 
@@ -32,7 +32,7 @@ export const createAdmin = async (req, res) => {
     branch
   } = req.body;
 
-  if (!uuid || !first_name || !last_name || !phone_number || !password || !salary || !permissions || !shop_id || branch==null) {
+  if (uuid == null || first_name == null || last_name == null || phone_number == null || password == null || salary == null || permissions == null || shop_id == null || branch==null) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
 
@@ -136,13 +136,13 @@ export const createAdmin = async (req, res) => {
 // UPDATE ADMIN
 // =============================================
 export const updateAdmin = async (req, res) => {
-  if (!req.body) {
+  if (req.body == null) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
 
   const { uuid, first_name, last_name, phone_number, password, work_start, work_end, salary, permissions } = req.body;
 
-  if (!uuid) {
+  if (uuid == null) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
 
@@ -204,7 +204,7 @@ export const updateAdmin = async (req, res) => {
 export const deleteAdmin = async (req, res) => {
   const { uuid } = req.body;
 
-  if (!uuid) {
+  if (uuid == null) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
 
@@ -241,7 +241,7 @@ export const deleteAdmin = async (req, res) => {
 export const getAdmin = async (req, res) => {
   const uuid = req.headers["uuid"];
 
-  if (!uuid) {
+  if (uuid == null) {
     return res.status(400).json({ error: errorMessages.MISSING_FIELDS });
   }
 

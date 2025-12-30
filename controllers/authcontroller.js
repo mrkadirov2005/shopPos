@@ -8,13 +8,13 @@ import { logger } from "../middleware/Logger.js";
 // GENERATE SUPERADMIN TOKEN
 // =====================================================
 export const generateSuperAdminToken = async (req, res) => {
-  if (!req.body) {
+  if (req.body == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
   const { uuid, name, phonenumber, password } = req.body;
 
-  if (!uuid || !name || !phonenumber || !password) {
+  if (uuid == null || name == null || phonenumber == null || password == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -67,13 +67,13 @@ export const generateSuperAdminToken = async (req, res) => {
 // GENERATE ADMIN TOKEN
 // =====================================================
 export const generateAdminToken = async (req, res) => {
-  if (!req.body) {
+  if (req.body == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
   const { uuid, name, phonenumber, password } = req.body;
 
-  if (!uuid || !name || !phonenumber || !password) {
+  if (uuid == null || name == null || phonenumber == null || password == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -119,13 +119,13 @@ export const generateAdminToken = async (req, res) => {
 // LOGIN SUPERUSER
 // =====================================================
 export const loginSuperUser = async (req, res) => {
-  if (!req.body) {
+  if (req.body == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
   const {   name,password } = req.body;
 
-  if (  !name || !password) {
+  if (name == null || password == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -139,7 +139,7 @@ export const loginSuperUser = async (req, res) => {
     const user = result.rows[0];
     console.error(result)
 
-    if (!user) {
+    if (user == null) {
       await logger(null, name, "SuperUser Login FAILED - not found");
       return res.status(404).json({ message: "Superuser not found" });
     }
@@ -183,13 +183,13 @@ export const loginSuperUser = async (req, res) => {
 // LOGIN ADMIN
 // =====================================================
 export const loginAdmin = async (req, res) => {
-  if (!req.body) {
+  if (req.body == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
   const { password, name } = req.body;
 
-  if (!password || !name) {
+  if (password == null || name == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -239,7 +239,7 @@ export const loginAdmin = async (req, res) => {
 export const handleLogOut = async (req, res) => {
   const { uuid, role } = req.body;
 
-  if (!uuid || !role) {
+  if (uuid == null || role == null) {
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 

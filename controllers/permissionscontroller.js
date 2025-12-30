@@ -8,14 +8,14 @@ export const createPermission = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!req.body) {
+  if (req.body == null) {
     await logger(shop_id, user_id, "Create permission failed - missing request body");
     return res.status(400).json({ message: "Missing required field" });
   }
 
   const { name } = req.body;
 
-  if (!name) {
+  if (name == null) {
     await logger(shop_id, user_id, "Create permission failed - missing name");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }

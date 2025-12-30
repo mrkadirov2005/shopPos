@@ -10,7 +10,7 @@ export const getAllDebts = async (req, res) => {
     const { shop_id } = req.headers;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
-    if (!shop_id) {
+    if (shop_id == null) {
         await logger(shop_id, user_id, "Get all debts failed - missing shop_id");
         return res.status(400).json({ message: "Missing shop_id" });
     }
@@ -40,7 +40,7 @@ export const getDebtById = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!id) {
+    if (id == null) {
         await logger(shop_id, user_id, "Get debt by ID failed - missing debt ID");
         return res.status(400).json({ message: "Debt ID required" });
     }
@@ -75,7 +75,7 @@ export const getDebtsByBranch = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!branch_id) {
+    if (branch_id == null) {
         await logger(shop_id, user_id, "Get debts by branch failed - missing branch_id");
         return res.status(400).json({ message: "Missing branch_id" });
     }
@@ -104,7 +104,7 @@ export const getDebtsByCustomer = async (req, res) => {
     const { name, shop_id } = req.body;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
-    if (!name || !shop_id) {
+    if (name == null || shop_id == null) {
         await logger(shop_id, user_id, "Get debts by customer failed - missing required fields");
         return res.status(400).json({ message: "Missing required fields" });
     }
@@ -133,7 +133,7 @@ export const getUnreturnedDebts = async (req, res) => {
     const { shop_id } = req.headers;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
-    if (!shop_id) {
+    if (shop_id == null) {
         await logger(shop_id, user_id, "Get unreturned debts failed - missing shop_id");
         return res.status(400).json({ message: "Missing shop_id" });
     }
@@ -172,7 +172,7 @@ export const createDebt = async (req, res) => {
     
 
     // Validate required fields
-    if (!name || !amount || !product_names || branch_id==null || !shop_id || !admin_id) {
+    if (name == null || amount == null || product_names == null || branch_id==null || shop_id == null || admin_id == null) {
         await logger(shop_id, user_id, "Create debt failed - missing required fields");
         return res.status(400).json({ message: "Missing required fields" });
     }
@@ -226,7 +226,7 @@ export const updateDebt = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!id) {
+    if (id == null) {
         await logger(shop_id, user_id, "Update debt failed - missing debt ID");
         return res.status(400).json({ message: "Debt ID is required" });
     }
@@ -273,7 +273,7 @@ export const markDebtAsReturned = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!id) {
+    if (id == null) {
         await logger(shop_id, user_id, "Mark debt as returned failed - missing debt ID");
         return res.status(400).json({ message: "Debt ID is required" });
     }
@@ -308,7 +308,7 @@ export const deleteDebt = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!id) {
+    if (id == null) {
         await logger(shop_id, user_id, "Delete debt failed - missing debt ID");
         return res.status(400).json({ message: "Debt ID required" });
     }
@@ -342,7 +342,7 @@ export const getDebtStatistics = async (req, res) => {
     const { shop_id } = req.headers;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
-    if (!shop_id) {
+    if (shop_id == null) {
         await logger(shop_id, user_id, "Get debt statistics failed - missing shop_id");
         return res.status(400).json({ message: "Missing shop_id" });
     }

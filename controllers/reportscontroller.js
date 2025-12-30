@@ -9,7 +9,7 @@ export const getShopReports = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
   // Validate role
-  if (!role) {
+  if (role == null) {
     await logger(shop_id, user_id, "Get shop reports failed - missing role");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
@@ -23,7 +23,7 @@ export const getShopReports = async (req, res) => {
       await logger(shop_id, user_id, `Fetched shop reports as superuser - count: ${response.rows.length}`);
     } else if (role === "admin") {
       // Admin must provide shop_id
-      if (!name || !uuid) {
+      if (name == null || uuid == null) {
         await logger(shop_id, user_id, "Get shop reports failed - admin missing name or uuid");
         return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
       }

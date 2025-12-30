@@ -7,7 +7,7 @@ export const restoreDatabaseBackup = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!data || typeof data !== "object") {
+    if (data==null || typeof data !== "object") {
         await logger(shop_id, user_id, "Database restore failed - invalid backup file");
         return res.status(400).json({ message: "Invalid backup file" });
     }
@@ -17,7 +17,7 @@ export const restoreDatabaseBackup = async (req, res) => {
 
         for (const tableName of Object.keys(data)) {
             const rows = data[tableName];
-            if (!Array.isArray(rows)) continue;
+            if (Array.isArray(rows) === false) continue;
 
             // Clear table
             await client.query(`DELETE FROM ${tableName}`);

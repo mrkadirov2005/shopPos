@@ -10,7 +10,7 @@ export const getShops = async (req, res) => {
    
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const secret_key=req.headers["secret_key"];
-    if(!secret_key){
+    if(secret_key == null){
         await logger(null, user_id, "Get shops failed - missing secret key");
         return res.status(400).json({message:"Missing fields"});
     }
@@ -34,7 +34,7 @@ export const getShops = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
     // Validate shop_id
-    if (!shop_id) {
+    if (shop_id == null) {
         await logger(shop_id, user_id, "Get shop branches failed - missing shop_id");
         return res.status(400).json({ message: "Missing shop_id" });
     }
@@ -67,7 +67,7 @@ export const createBranch = async (req, res) => {
     const { name, location, employees, shop_id } = req.body;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   
-    if (!name || !location || !employees || !shop_id) {
+    if (name == null || location == null || employees == null || shop_id == null) {
         await logger(shop_id, user_id, "Create branch failed - missing required fields");
         return res.status(400).json({ message: "Missing required fields" });
     }
@@ -102,7 +102,7 @@ export const updateBranch = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!id) {
+    if (id == null) {
         await logger(shop_id, user_id, "Update branch failed - missing branch ID");
         return res.status(400).json({ message: "Branch ID is required" });
     }
@@ -144,7 +144,7 @@ export const deleteBranch = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!id) {
+    if (id == null) {
         await logger(shop_id, user_id, "Delete branch failed - missing branch ID");
         return res.status(400).json({ message: "Branch ID required" });
     }
@@ -176,7 +176,7 @@ export const getBranchById = async (req, res) => {
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if (!id) {
+    if (id == null) {
         await logger(shop_id, user_id, "Get branch by ID failed - missing branch ID");
         return res.status(400).json({ message: "Branch ID required" });
     }

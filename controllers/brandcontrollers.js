@@ -32,18 +32,18 @@ export const createBrand = async (req, res) => {
 
   // Required fields validation
   if (
-    !brand_name ||
-    !provider_name ||
-    !provider_last_name ||
-    !provider_phone ||
-    !provider_email
+    brand_name == null ||
+    provider_name == null ||
+    provider_last_name == null ||
+    provider_phone == null ||
+    provider_email == null
   ) {
     await logger(shop_id, user_id, "Create brand failed - missing required fields");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
   // Default card number
-  if (!provider_card_number) {
+  if (provider_card_number == null) {
     provider_card_number = "0000 0000 0000 0000";
   }
 
@@ -108,12 +108,12 @@ export const getSingleBrand=async(req,res)=>{
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
     const shop_id = req.headers["shop_id"] || null;
 
-    if(!req.body){
+    if(req.body == null){
         await logger(shop_id, user_id, "Get single brand failed - missing request body");
         return res.status(400).json({"messages":errorMessages.MISSING_FIELDS})
     }
     const {uuid}=req.body;
-    if(!uuid){
+    if(uuid == null){
         await logger(shop_id, user_id, "Get single brand failed - missing uuid");
         return res.status(400).json({"messages":errorMessages.MISSING_FIELDS})
     }
@@ -141,7 +141,7 @@ export const updateBrand = async (req, res) => {
   try {
     const { uuid } = req.body;
 
-    if (!uuid) {
+    if (uuid == null) {
       await logger(shop_id, user_id, "Update brand failed - UUID is required");
       return res.status(400).json({ message: "UUID is required" });
     }
@@ -227,7 +227,7 @@ export const deleteBrand = async (req, res) => {
   const shop_id = req.headers["shop_id"] || null;
 
   try {
-    if (!req.body || !req.body.uuid) {
+    if (req.body == null || req.body.uuid == null) {
       await logger(shop_id, user_id, "Delete brand failed - missing uuid");
       return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
     }

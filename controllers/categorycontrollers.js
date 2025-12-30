@@ -16,7 +16,7 @@ export const createCategory = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!category_name) {
+  if (category_name == null) {
     await logger(shop_id, user_id, "Create category failed - missing category_name");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
@@ -117,13 +117,13 @@ export const updateCategory = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!id) {
+  if (id == null) {
     await logger(shop_id, user_id, "Update category failed - missing id");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
   // No changes provided
-  if (!category_name && products_available === undefined) {
+  if (category_name == null && products_available === undefined) {
     await logger(shop_id, user_id, "Update category failed - no fields to update");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
@@ -189,7 +189,7 @@ export const deleteCategory = async (req, res) => {
   const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!id) {
+  if (id == null) {
     await logger(shop_id, user_id, "Delete category failed - missing id");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }

@@ -145,7 +145,7 @@ export const getDayStatistics = async (req, res) => {
 
 
 
-        if (!day || !month || !year) {
+        if (day == null || month == null || year == null) {
             await logger(shop_id, user_id, "Get day statistics failed - missing day, month, or year");
             return res.status(400).json({
                 message: "day, month, year are required"

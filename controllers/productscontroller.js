@@ -30,7 +30,7 @@ export const getShopProducts = async (req, res) => {
   const user_id = extractJWT(req.headers["authorization"]);
   const branch=req.headers["branch"]
 
-  if (!shop_id) {
+  if (shop_id == null) {
     
     const target_id=extractJWT(req.headers["authorization"])
     await logger(target_id, user_id, "Failed to get shop products: missing shop_id header");
@@ -56,7 +56,7 @@ export const getShopProducts = async (req, res) => {
 
 // =========================== GET SINGLE PRODUCT ===========================
 export const getSingleProduct = async (req, res) => {
-  if (!req.body || Object.keys(req.body).length === 0) {
+  if (req.body == null || Object.keys(req.body).length === 0) {
     
     const target_id=extractJWT(req.headers["authorization"])
     await logger(target_id, req.headers["uuid"] || null, "Missing fields in getSingleProduct");
@@ -66,7 +66,7 @@ export const getSingleProduct = async (req, res) => {
   const { id } = req.body;
   const user_id = req.headers["uuid"] || null;
 
-  if (!id) {
+  if (id == null) {
     
     const target_id=extractJWT(req.headers["authorization"])
     await logger(target_id, user_id, "Missing product id in getSingleProduct");
@@ -101,7 +101,7 @@ import { extractJWT } from "../middleware/extractToken.js";
 
 // =========================== CREATE NEW PRODUCT ===========================
 export const createNewProduct = async (req, res) => {
-  if (!req.body) {
+  if (req.body == null) {
     
     const target_id=extractJWT(req.headers["authorization"])
     await logger(target_id, req.headers["uuid"] || null, "Request body missing in createNewProduct");
@@ -133,14 +133,14 @@ export const createNewProduct = async (req, res) => {
   const user_id = req.headers["uuid"] || null;
 
   if (
-    !name ||
-    !category_id ||
-    !brand_id ||
-    !scale ||
+    name == null ||
+    category_id == null ||
+    brand_id == null ||
+    scale == null ||
     availability == null ||
     total == null ||
-    !net_price ||
-    !sell_price
+    net_price == null ||
+    sell_price == null
     || branch==null
   ) {
     await logger(shop_id, user_id, "Missing required fields in createNewProduct");
@@ -214,12 +214,12 @@ export const updateProduct = async (req, res) => {
   const user_id = req.headers["uuid"] || null;
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!id) {
+  if (id == null) {
     await logger(shop_id, user_id, "Product update failed - missing product ID");
     return res.status(400).json({ message: "Product ID is required" });
   }
 
-  if (!req.body || Object.keys(req.body).length === 0) {
+  if (req.body == null || Object.keys(req.body).length === 0) {
     await logger(shop_id, user_id, "Product update failed - no data provided");
     return res.status(400).json({ message: "No data provided to update" });
   }
@@ -321,7 +321,7 @@ export const restockProduct = async (req, res) => {
   const user_id = req.headers["uuid"] || null;
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!id) {
+  if (id == null) {
     await logger(shop_id, user_id, "Restock failed - missing product ID");
     return res.status(400).json({ message: "Product ID is required" });
   }
@@ -367,7 +367,7 @@ export const restockProduct = async (req, res) => {
 
 // =========================== DELETE PRODUCT ===========================
 export const deleteProduct = async (req, res) => {
-  if (!req.body || Object.keys(req.body).length === 0) {
+  if (req.body == null || Object.keys(req.body).length === 0) {
     
     const target_id=extractJWT(req.headers["authorization"])
     await logger(target_id, req.headers["uuid"] || null, "Delete product failed - missing body");
@@ -378,7 +378,7 @@ export const deleteProduct = async (req, res) => {
   const user_id = req.headers["uuid"] || null;
   const shop_id = req.headers["shop_id"] || null;
 
-  if (!id) {
+  if (id == null) {
     await logger(shop_id, user_id, "Delete product failed - missing product ID");
     return res.status(400).json({ message: "Product ID is required" });
   }
