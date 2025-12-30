@@ -1,9 +1,16 @@
 import {client} from "./../config/dbcon.js";
+import { logger } from "../middleware/Logger.js";
+import { extractJWT } from "../middleware/extractToken.js";
+
 export const MainFinance = async (req, res) => {
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    const shop_id = req.headers["shop_id"] || null;
+
     try {
         const response = await client.query("SELECT * FROM sales");
 
         if (response.rowCount === 0) {
+            await logger(shop_id, user_id, "Main finance statistics - no data found");
             return res.status(200).json({
                 message: "No data found",
                 data: []
@@ -40,6 +47,8 @@ export const MainFinance = async (req, res) => {
             sendable_data.today.profit += Number(product.profit);
         }
 
+        await logger(shop_id, user_id, "Fetched main finance statistics");
+
         return res.status(200).json({
             message: "Fetched successfully",
             data: sendable_data
@@ -47,11 +56,15 @@ export const MainFinance = async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        await logger(shop_id, user_id, `Main finance statistics failed - error: ${err.message}`);
         return res.status(500).json({ message: "Server error" });
     }
 };
 
 export const highStockProducts = async (req, res) => {
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    const shop_id = req.headers["shop_id"] || null;
+
     try {
         const response = await client.query(
             "SELECT * FROM product ORDER BY (total - availability) desc LIMIT $1",
@@ -59,11 +72,14 @@ export const highStockProducts = async (req, res) => {
         );
 
         if (response.rowCount === 0) {
+            await logger(shop_id, user_id, "High stock products - no products found");
             return res.status(200).json({
                 message: "No products found",
                 data: []
             });
         }
+
+        await logger(shop_id, user_id, "Fetched high stock products");
 
         return res.status(200).json({
             message: "Successfully fetched",
@@ -72,6 +88,7 @@ export const highStockProducts = async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        await logger(shop_id, user_id, `High stock products failed - error: ${err.message}`);
         return res.status(500).json({
             message: "Server error",
             error: err.message
@@ -82,6 +99,9 @@ export const highStockProducts = async (req, res) => {
 
 
 export const lowStockProducts = async (req, res) => {
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    const shop_id = req.headers["shop_id"] || null;
+
     try {
         const response = await client.query(
             "SELECT * FROM product ORDER BY (total - availability) asc LIMIT $1",
@@ -89,11 +109,14 @@ export const lowStockProducts = async (req, res) => {
         );
 
         if (response.rowCount === 0) {
+            await logger(shop_id, user_id, "Low stock products - no products found");
             return res.status(200).json({
                 message: "No products found",
                 data: []
             });
         }
+
+        await logger(shop_id, user_id, "Fetched low stock products");
 
         return res.status(200).json({
             message: "Successfully fetched",
@@ -102,6 +125,7 @@ export const lowStockProducts = async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        await logger(shop_id, user_id, `Low stock products failed - error: ${err.message}`);
         return res.status(500).json({
             message: "Server error",
             error: err.message
@@ -111,6 +135,9 @@ export const lowStockProducts = async (req, res) => {
 
 
 export const getDayStatistics = async (req, res) => {
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    const shop_id = req.headers["shop_id"] || null;
+
     try {
     const day=req.headers["day"]
     const month=req.headers["month"]
@@ -119,6 +146,7 @@ export const getDayStatistics = async (req, res) => {
 
 
         if (!day || !month || !year) {
+            await logger(shop_id, user_id, "Get day statistics failed - missing day, month, or year");
             return res.status(400).json({
                 message: "day, month, year are required"
             });
@@ -145,6 +173,8 @@ export const getDayStatistics = async (req, res) => {
             data.profit += Number(sale.profit);
         }
 
+        await logger(shop_id, user_id, `Fetched day statistics for ${year}-${month}-${day}`);
+
         return res.status(200).json({
             message: "Statistics fetched successfully",
             data
@@ -152,6 +182,7 @@ export const getDayStatistics = async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        await logger(shop_id, user_id, `Get day statistics failed - error: ${err.message}`);
         return res.status(500).json({
             message: "Server error",
             error: err.message
@@ -160,6 +191,9 @@ export const getDayStatistics = async (req, res) => {
 };
 
 export const getWeekStatistics = async (req, res) => {
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    const shop_id = req.headers["shop_id"] || null;
+
     try {
         const results = [];
 
@@ -203,6 +237,8 @@ export const getWeekStatistics = async (req, res) => {
             });
         }
 
+        await logger(shop_id, user_id, "Fetched week statistics (last 7 days)");
+
         return res.status(200).json({
             message: "Fetched last 7 days statistics successfully",
             data: results
@@ -210,6 +246,7 @@ export const getWeekStatistics = async (req, res) => {
 
     } catch (err) {
         console.error(err);
+        await logger(shop_id, user_id, `Get week statistics failed - error: ${err.message}`);
         return res.status(500).json({
             message: "Server error",
             error: err.message

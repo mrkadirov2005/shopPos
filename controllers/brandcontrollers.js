@@ -13,7 +13,9 @@
 import express from "express";
 import {client} from '../config/dbcon.js';
 import { errorMessages } from "../config/errorMessages.js";
-import {v4 as uuidv4} from "uuid"
+import {v4 as uuidv4} from "uuid";
+import { logger } from "../middleware/Logger.js";
+import { extractJWT } from "../middleware/extractToken.js";
 
 export const createBrand = async (req, res) => {
   let {
@@ -25,6 +27,9 @@ export const createBrand = async (req, res) => {
     provider_email
   } = req.body;
 
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
+
   // Required fields validation
   if (
     !brand_name ||
@@ -33,6 +38,7 @@ export const createBrand = async (req, res) => {
     !provider_phone ||
     !provider_email
   ) {
+    await logger(shop_id, user_id, "Create brand failed - missing required fields");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -60,6 +66,8 @@ export const createBrand = async (req, res) => {
       ]
     );
 
+    await logger(shop_id, user_id, `Brand created successfully: ${brand_name}`);
+
     return res.status(201).json({
       message: "Brand created successfully",
       brand: response.rows[0],
@@ -69,51 +77,72 @@ export const createBrand = async (req, res) => {
     console.error("Error creating brand:", error);
 
     if (error.code === "23505") {
+      await logger(shop_id, user_id, `Create brand failed - brand name already exists: ${brand_name}`);
       return res.status(400).json({ error: "Brand name already exists" });
     }
 
+    await logger(shop_id, user_id, `Create brand failed - error: ${error.message}`);
     return res.status(500).json({ error: errorMessages.INTERNAL_SERVER_ERROR });
   }
 };
 
 export const getAllBrands=async(req,res)=>{
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    const shop_id = req.headers["shop_id"] || null;
+
     try {
         const response=await client.query("SELECT * FROM  brand");
         if(response.rows.length>0){
+            await logger(shop_id, user_id, `Fetched all brands - count: ${response.rows.length}`);
             return res.status(200).json({"message":"Fetched all data","data":response.rows})
         }
+        await logger(shop_id, user_id, "Fetched all brands - no brands found");
+        return res.status(200).json({"message":"No brands found","data":[]});
     } catch (error) {
+        await logger(shop_id, user_id, `Get all brands failed - error: ${error.message}`);
         return res.status(500).json({"message":errorMessages.INTERNAL_SERVER_ERROR,"error":error})
     }
 }
 
 export const getSingleBrand=async(req,res)=>{
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    const shop_id = req.headers["shop_id"] || null;
+
     if(!req.body){
+        await logger(shop_id, user_id, "Get single brand failed - missing request body");
         return res.status(400).json({"messages":errorMessages.MISSING_FIELDS})
     }
     const {uuid}=req.body;
     if(!uuid){
+        await logger(shop_id, user_id, "Get single brand failed - missing uuid");
         return res.status(400).json({"messages":errorMessages.MISSING_FIELDS})
     }
      try {
         const response=await client.query("SELECT * FROM  brand WHERE uuid=$1",[uuid]);
         if(response.rows.length>0){
+            await logger(shop_id, user_id, `Fetched single brand: ${response.rows[0].brand_name}`);
             return res.status(200).json({"message":"Fetched all data","data":response.rows[0]})
         }
         else{
+            await logger(shop_id, user_id, `Get single brand failed - brand not found: ${uuid}`);
             return res.status(404).json({"message":"Brand not found"})
         }
     } catch (error) {
+        await logger(shop_id, user_id, `Get single brand failed - error: ${error.message}`);
         return res.status(500).json({"message":errorMessages.INTERNAL_SERVER_ERROR,"error":error})
     }
 }
 
 export const updateBrand = async (req, res) => {
   console.log(req.body)
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
+
   try {
     const { uuid } = req.body;
 
     if (!uuid) {
+      await logger(shop_id, user_id, "Update brand failed - UUID is required");
       return res.status(400).json({ message: "UUID is required" });
     }
 
@@ -124,6 +153,7 @@ export const updateBrand = async (req, res) => {
     );
 
     if (existing.rows.length === 0) {
+      await logger(shop_id, user_id, `Update brand failed - brand not found: ${uuid}`);
       return res.status(404).json({ message: "Brand not found" });
     }
 
@@ -172,6 +202,8 @@ export const updateBrand = async (req, res) => {
 
     const updated = await client.query(query, values);
 
+    await logger(shop_id, user_id, `Brand updated successfully: ${updated.rows[0].brand_name}`);
+
     return res.status(200).json({
       message: "Brand updated successfully",
       brand: updated.rows[0],
@@ -181,16 +213,22 @@ export const updateBrand = async (req, res) => {
     console.error("Error updating brand:", error);
 
     if (error.code === "23505") {
+      await logger(shop_id, user_id, "Update brand failed - brand name already exists");
       return res.status(400).json({ error: "Brand name already exists" });
     }
 
+    await logger(shop_id, user_id, `Update brand failed - error: ${error.message}`);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
 
 export const deleteBrand = async (req, res) => {
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
+
   try {
     if (!req.body || !req.body.uuid) {
+      await logger(shop_id, user_id, "Delete brand failed - missing uuid");
       return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
     }
 
@@ -203,6 +241,7 @@ export const deleteBrand = async (req, res) => {
     );
 
     if (existing.rows.length === 0) {
+      await logger(shop_id, user_id, `Delete brand failed - brand not found: ${uuid}`);
       return res.status(404).json({ message: "Brand not found" });
     }
 
@@ -212,6 +251,8 @@ export const deleteBrand = async (req, res) => {
       [uuid]
     );
 
+    await logger(shop_id, user_id, `Brand deleted successfully: ${deleted.rows[0].brand_name}`);
+
     return res.status(200).json({
       message: "Brand deleted successfully",
       deleted_brand: deleted.rows[0],
@@ -219,6 +260,8 @@ export const deleteBrand = async (req, res) => {
 
   } catch (error) {
     console.error("Error deleting brand:", error);
+
+    await logger(shop_id, user_id, `Delete brand failed - error: ${error.message}`);
 
     return res.status(500).json({
       error: errorMessages.INTERNAL_SERVER_ERROR,

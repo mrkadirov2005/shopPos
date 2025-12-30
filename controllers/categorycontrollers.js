@@ -7,12 +7,17 @@
 // );
 import { errorMessages } from "../config/errorMessages.js";
 import {client} from "./../config/dbcon.js"
-import {v4 as uuidv4} from "uuid"
+import {v4 as uuidv4} from "uuid";
+import { logger } from "../middleware/Logger.js";
+import { extractJWT } from "../middleware/extractToken.js";
 
 export const createCategory = async (req, res) => {
   const { category_name } = req.body;
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
 
   if (!category_name) {
+    await logger(shop_id, user_id, "Create category failed - missing category_name");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -24,6 +29,8 @@ export const createCategory = async (req, res) => {
       [category_name, uuid]
     );
 
+    await logger(shop_id, user_id, `Category created successfully: ${category_name}`);
+
     return res.status(201).json({
       message: "Category created successfully",
       category: response.rows[0],
@@ -32,9 +39,11 @@ export const createCategory = async (req, res) => {
     console.error("Error creating category:", error);
 
     if (error.code === "23505") { // unique_violation
+      await logger(shop_id, user_id, `Create category failed - category name already exists: ${category_name}`);
       return res.status(400).json({ error: "Category name already exists" });
     }
 
+    await logger(shop_id, user_id, `Create category failed - error: ${error.message}`);
     return res.status(500).json({ error: errorMessages.INTERNAL_SERVER_ERROR });
   }
 };
@@ -42,13 +51,18 @@ export const createCategory = async (req, res) => {
 
 // get all categories
 export const getAllCategories = async (req, res) => {
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
 
   try {
     const response = await client.query("SELECT * FROM category ORDER BY id DESC");
 
     if (response.rows.length === 0) {
+      await logger(shop_id, user_id, "Fetched all categories - no categories found");
       return res.status(200).json({ message: "No categories found", data: [] });
     }
+
+    await logger(shop_id, user_id, `Fetched all categories - count: ${response.rows.length}`);
 
     return res.status(200).json({
       message: "Successfully fetched all categories",
@@ -57,6 +71,7 @@ export const getAllCategories = async (req, res) => {
 
   } catch (error) {
     console.error("Error fetching categories:", error);
+    await logger(shop_id, user_id, `Get all categories failed - error: ${error.message}`);
     return res.status(500).json({ error: errorMessages.INTERNAL_SERVER_ERROR });
   }
 };
@@ -68,6 +83,8 @@ export const getAllCategories = async (req, res) => {
 
 export const getCategory = async (req, res) => {
   const { id } = req.body;
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
 
   try {
     const response = await client.query(
@@ -76,13 +93,17 @@ export const getCategory = async (req, res) => {
     );
 
     if (response.rows.length === 0) {
+      await logger(shop_id, user_id, `Get category failed - category not found: ${id}`);
       return res.status(404).json({ message: "Category not found" });
     }
+
+    await logger(shop_id, user_id, `Fetched single category: ${response.rows[0].category_name}`);
 
     return res.status(200).json({ data: response.rows[0] });
 
   } catch (error) {
     console.error("Error fetching category:", error);
+    await logger(shop_id, user_id, `Get category failed - error: ${error.message}`);
     return res.status(500).json({ error: errorMessages.INTERNAL_SERVER_ERROR });
   }
 };
@@ -93,13 +114,17 @@ export const getCategory = async (req, res) => {
 // update category
 export const updateCategory = async (req, res) => {
   const { id, category_name, products_available } = req.body;
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
 
   if (!id) {
+    await logger(shop_id, user_id, "Update category failed - missing id");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
   // No changes provided
   if (!category_name && products_available === undefined) {
+    await logger(shop_id, user_id, "Update category failed - no fields to update");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -133,8 +158,11 @@ export const updateCategory = async (req, res) => {
     const response = await client.query(query, values);
 
     if (response.rows.length === 0) {
+      await logger(shop_id, user_id, `Update category failed - category not found: ${id}`);
       return res.status(404).json({ message: "Category not found" });
     }
+
+    await logger(shop_id, user_id, `Category updated successfully: ${response.rows[0].category_name}`);
 
     return res.status(200).json({
       message: "Category updated successfully",
@@ -145,9 +173,11 @@ export const updateCategory = async (req, res) => {
     console.error("Error updating category:", error);
 
     if (error.code === "23505") {
+      await logger(shop_id, user_id, "Update category failed - category name already exists");
       return res.status(400).json({ error: "Category name already exists" });
     }
 
+    await logger(shop_id, user_id, `Update category failed - error: ${error.message}`);
     return res.status(500).json({ error: errorMessages.INTERNAL_SERVER_ERROR });
   }
 };
@@ -156,8 +186,11 @@ export const updateCategory = async (req, res) => {
 // delete category
 export const deleteCategory = async (req, res) => {
   const { id } = req.body;
+  const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+  const shop_id = req.headers["shop_id"] || null;
 
   if (!id) {
+    await logger(shop_id, user_id, "Delete category failed - missing id");
     return res.status(400).json({ message: errorMessages.MISSING_FIELDS });
   }
 
@@ -169,6 +202,7 @@ export const deleteCategory = async (req, res) => {
     );
 
     if (existing.rows.length === 0) {
+      await logger(shop_id, user_id, `Delete category failed - category not found: ${id}`);
       return res.status(404).json({ message: "Category not found" });
     }
 
@@ -177,6 +211,8 @@ export const deleteCategory = async (req, res) => {
       [id]
     );
 
+    await logger(shop_id, user_id, `Category deleted successfully: ${deleted.rows[0].category_name}`);
+
     return res.status(200).json({
       message: "Category deleted successfully",
       deleted_category: deleted.rows[0],
@@ -184,6 +220,7 @@ export const deleteCategory = async (req, res) => {
 
   } catch (error) {
     console.error("Error deleting category:", error);
+    await logger(shop_id, user_id, `Delete category failed - error: ${error.message}`);
     return res.status(500).json({ error: errorMessages.INTERNAL_SERVER_ERROR });
   }
 };
