@@ -7,7 +7,7 @@ import { extractJWT } from "../middleware/extractToken.js";
 // Get all debts
 export const getAllDebts = async (req, res) => {
     console.log("Fetching all debts");
-    const { shop_id } = req.headers;
+    const { shop_id } = req.body;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
     if (shop_id == null) {
@@ -38,7 +38,7 @@ export const getAllDebts = async (req, res) => {
 export const getDebtById = async (req, res) => {
     const { id } = req.body;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
-    const shop_id = req.headers["shop_id"] || null;
+    const shop_id = req.body.shop_id || null;
 
     if (id == null) {
         await logger(shop_id, user_id, "Get debt by ID failed - missing debt ID");
@@ -73,7 +73,7 @@ export const getDebtById = async (req, res) => {
 export const getDebtsByBranch = async (req, res) => {
     const { branch_id } = req.headers;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
-    const shop_id = req.headers["shop_id"] || null;
+    const shop_id = req.body.shop_id || null;
 
     if (branch_id == null) {
         await logger(shop_id, user_id, "Get debts by branch failed - missing branch_id");
@@ -130,7 +130,7 @@ export const getDebtsByCustomer = async (req, res) => {
 
 // Get unreturned debts
 export const getUnreturnedDebts = async (req, res) => {
-    const { shop_id } = req.headers;
+    const { shop_id } = req.body.shop_id;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
     if (shop_id == null) {

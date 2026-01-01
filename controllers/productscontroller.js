@@ -26,10 +26,9 @@ export const getProducts = async (req, res) => {
 
 // =========================== GET SHOP PRODUCTS ===========================
 export const getShopProducts = async (req, res) => {
-  const shop_id = req.headers["shop_id"]; 
   const user_id = extractJWT(req.headers["authorization"]);
   const branch=req.headers["branch"]
-
+const shop_id = req.body.shop_id || null;
   if (shop_id == null) {
     
     const target_id=extractJWT(req.headers["authorization"])
