@@ -339,7 +339,7 @@ export const deleteDebt = async (req, res) => {
 
 // Get debt statistics
 export const getDebtStatistics = async (req, res) => {
-    const { shop_id } = req.headers;
+    const { shop_id } = req.body;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
     if (shop_id == null) {
