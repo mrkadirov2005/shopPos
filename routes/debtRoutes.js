@@ -18,7 +18,7 @@ const router = express.Router();
 // GET routes
 router.post("/all", getAllDebts);
 router.get("/branch", getDebtsByBranch);
-router.get("/unreturned", getUnreturnedDebts);
+router.post("/unreturned", getUnreturnedDebts);
 router.post("/statistics", getDebtStatistics);
 
 // POST routes

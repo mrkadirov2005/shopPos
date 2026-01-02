@@ -189,6 +189,56 @@ export const createNewSale = async (req, res) => {
 
 
 
+export const updateSale = async (req, res) => {
+  const { sale_id, updatedFields } = req.body;
+  const target_id = extractJWT(req.headers["authorization"]);
+  const user_id = req.headers["uuid"] || null;
+  if (sale_id==null || updatedFields == null) {
+    await logger(target_id, user_id, "Update sale failed - missing sale_id or updatedFields");
+    return res.status(400).send({ message: errorMessages.MISSING_FIELDS });
+  }
+  try {
+    const setClause = Object.keys(updatedFields)
+
+      .map((key, index) => `${key} = $${index + 2}`)
+      .join(", ");
+    const values = [sale_id, ...Object.values(updatedFields)];
+    const query = `UPDATE sales SET ${setClause} WHERE sale_id = $1`;
+    const result = await client.query(query, values);
+    if (result.rowCount === 0) {
+      await logger(target_id, user_id, `Update sale failed - sale not found: ${sale_id}`);
+      return res.status(404).send({ message: "Sale not found" });
+    }
+    await logger(target_id, user_id, `Sale updated successfully: ${sale_id}`);
+    return res.status(200).send({ message: "Sale updated successfully" });
+  } catch (error) {
+    console.error("Error updating sale:", error);
+    await logger(target_id, user_id, "Error updating sale: " + error.message);
+    return res.status(500).send({ message: errorMessages.INTERNAL_SERVER_ERROR });
+  }
+};
+
+
+// delete sale 
+export const deleteSale = async (req, res) => {
+  const sale_id = req.body.sale_id;
+  const target_id = extractJWT(req.headers["authorization"]);
+  const user_id = req.headers["uuid"] || null;
+  try {
+    const result = await client.query("DELETE FROM sales WHERE sale_id = $1", [sale_id]);
+    if (result.rowCount === 0) {
+      await logger(target_id, user_id, `Delete sale failed - sale not found: ${sale_id}`);
+      return res.status(404).send({ message: "Sale not found" });
+    }
+    await logger(target_id, user_id, `Sale deleted successfully: ${sale_id}`);
+    return res.status(200).send({ message: "Sale deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting sale:", error);
+    await logger(target_id, user_id, "Error deleting sale: " + error.message);
+    return res.status(500).send({ message: errorMessages.INTERNAL_SERVER_ERROR });
+  }
+};
+
 export const getSaleById = async (req, res) => {
   const sale_id = req.headers["sale_id"];
   const target_id = extractJWT(req.headers["authorization"]);

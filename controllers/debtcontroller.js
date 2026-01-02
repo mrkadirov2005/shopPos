@@ -130,12 +130,12 @@ export const getDebtsByCustomer = async (req, res) => {
 
 // Get unreturned debts
 export const getUnreturnedDebts = async (req, res) => {
-    const { shop_id } = req.body.shop_id;
+    const  shop_id  = req.body.shop_id;
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
 
     if (shop_id == null) {
         await logger(shop_id, user_id, "Get unreturned debts failed - missing shop_id");
-        return res.status(400).json({ message: "Missing shop_id" });
+        return res.status(400).json({ message: "Missing shop_id"+shop_id });
     }
 
     try {

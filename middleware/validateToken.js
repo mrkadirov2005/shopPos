@@ -9,7 +9,7 @@ export const validateToken = (req, res, next) => {
   }
 
   const token = authHeader;
-
+  
   jwt.verify(token, JWTKEYS.jwt_key, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: errorMessages.NO_TOKEN });

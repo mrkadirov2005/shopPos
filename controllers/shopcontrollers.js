@@ -29,6 +29,43 @@ export const getShops = async (req, res) => {
         return res.status(500).json({message:"Server Error"});
     }
 }
+
+
+// create all of the CRUD for the shop
+
+export const updateShop = async (req, res) => {
+
+    const { id, name } = req.body;
+    const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
+    if (id == null || name == null) {
+        await logger(null, user_id, "Update shop failed - missing required fields");
+        return res.status(400).json({ message: "Missing required fields" });
+    }
+    const query = `
+        UPDATE shopname
+        SET name = $1
+        WHERE id = $2
+        RETURNING *;
+    `;
+    try {
+        const result = await client.query(query, [name, id]);
+
+        if (result.rows.length === 0) {
+            await logger(null, user_id, `Update shop failed - shop not found: ${id}`);
+            return res.status(404).json({ message: "Shop not found" });
+        }
+        await logger(null, user_id, `Shop updated successfully: ${result.rows[0].name}`);
+        return res.status(200).json({
+            message: "Shop updated successfully",
+            shop: result.rows[0]
+        });
+    } catch (err) {
+        console.error("Error updating shop:", err);
+        await logger(null, user_id, `Update shop failed - error: ${err.message}`);
+        return res.status(500).json({ message: "Server Error" });
+    }
+};
+
  export const getShopBranches = async (req, res) => {
     const shop_id = req.headers["shop_id"];
     const user_id = req.headers["uuid"] || extractJWT(req.headers["authorization"]);
@@ -71,8 +108,11 @@ export const createBranch = async (req, res) => {
         await logger(shop_id, user_id, "Create branch failed - missing required fields");
         return res.status(400).json({ message: "Missing required fields" });
     }
-    const uuid=uuidv4()
+    // get all branchs and create the id based on count +1 instead of uuid 
+    // do not use the uuidv4 for id
 
+    const allBranches = await client.query("SELECT * FROM branches");
+    const uuid = allBranches.rows.length + 1;
     const query = `
         INSERT INTO branches (name, location, employees, shop_id,id)
         VALUES ($1, $2, $3, $4,$5)

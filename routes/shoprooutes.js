@@ -7,7 +7,8 @@ import {
     createBranch,
     updateBranch,
     deleteBranch,
-    getBranchById
+    getBranchById,
+    updateShop
 } from "../controllers/shopcontrollers.js";
 
 /**
@@ -128,6 +129,7 @@ router.post("/getbranch", getBranchById);
  */
 router.post("/branch", createBranch);
 
+router.post("/update_shop", updateShop)
 /**
  * @swagger
  * /shops/branch:

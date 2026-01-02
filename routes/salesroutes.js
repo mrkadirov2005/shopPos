@@ -5,13 +5,20 @@ import {
   getSaleById,
   getAllSales,
   getAdminSales,
+  updateSale,
+  deleteSale,
 } from "../controllers/salescontroller.js";
 import { validateToken } from "../middleware/validateToken.js"; // adjust path
 
 const router = express.Router();
+router.post("/update-sale",updateSale)
 
 // Protect all sales routes with auth middleware
 router.use(validateToken);
+
+router.delete("/delete", deleteSale);
+router.post("/get-sale", getSaleById);
+
 
 /**
  * @swagger
